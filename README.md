@@ -1,4 +1,4 @@
-<div align="center">   
+<div align="right">   
 
 ## You Only :eyes: Once for Panoptic ​ :car: Perception
 ### The Illustration of YOLOP
