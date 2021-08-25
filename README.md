@@ -91,80 +91,42 @@
 
 ```python
 ├─inference
-
 │ ├─images   # inference images
-
 │ ├─output   # inference result
-
 ├─lib
-
 │ ├─config/default   # configuration of training and validation
-
 │ ├─core    
-
 │ │ ├─activations.py   # activation function
-
 │ │ ├─evaluate.py   # calculation of metric
-
 │ │ ├─function.py   # training and validation of model
-
 │ │ ├─general.py   #calculation of metric、nms、conversion of data-format、visualization
-
 │ │ ├─loss.py   # loss function
-
 │ │ ├─postprocess.py   # postprocess(refine da-seg and ll-seg, unrelated to paper)
-
 │ ├─dataset
-
 │ │ ├─AutoDriveDataset.py   # Superclass dataset，general function
-
 │ │ ├─bdd.py   # Subclass dataset，specific function
-
 │ │ ├─hust.py   # Subclass dataset(Campus scene, unrelated to paper)
-
 │ │ ├─convect.py 
-
 │ │ ├─DemoDataset.py   # demo dataset(image, video and stream)
-
 │ ├─models
-
 │ │ ├─YOLOP.py    # Setup and Configuration of model
-
 │ │ ├─light.py    # Model lightweight（unrelated to paper, zwt)
-
 │ │ ├─commom.py   # calculation module
-
 │ ├─utils
-
 │ │ ├─augmentations.py    # data augumentation
-
 │ │ ├─autoanchor.py   # auto anchor(k-means)
-
 │ │ ├─split_dataset.py  # (Campus scene, unrelated to paper)
-
 │ │ ├─utils.py  # logging、device_select、time_measure、optimizer_select、model_save&initialize 、Distributed training
-
 │ ├─run
-
 │ │ ├─dataset/training time  # Visualization, logging and model_save
-
 ├─tools
-
 │ │ ├─demo.py    # demo(folder、camera)
-
 │ │ ├─test.py    
-
 │ │ ├─train.py    
-
 ├─toolkits
-
 │ │ ├─depoly    # Deployment of model
-
 │ │ ├─label_conversion
-
 ├─weights    # Pretraining model
-
-
 ```
 
 ---
@@ -197,13 +159,9 @@ We provide the code for conversion of label in `./toolkits/label_conversion`.  W
 ```
 # The id represent the correspondence relation
 ├─dataset root
-
 │ ├─images/ id.jpg
-
 │ ├─det_annotations/ id.json
-
 │ ├─da_seg_annotations/ id.png
-
 │ ├─ll_seg_annotations/ id.png
 ```
 
