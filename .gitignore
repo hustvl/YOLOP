@@ -1,0 +1,12 @@
+.DS_Store
+__pycache__/
+.idea/
+.tmp/
+.vscode/
+bdd/
+runs/
+inference/
+*.pth
+*.pt
+*.tar
+*.tar.gz
