@@ -1,7 +1,20 @@
 <div align="left">   
 
 ## You Only :eyes: Once for Panoptic ​ :car: Perception
+> [**You Only Look at Once for Panoptic driving Perception**](https://arxiv.org/abs/2108.11250)
+>
+> by Dong Wu, Manwen Liao, WeiTian Zhang, [Xinggang Wang](https://xinggangw.info/)<sup> :email:</sup>
+>
+> [*School of EIC, HUST*](http://eic.hust.edu.cn/English/Home.htm)
+>
+>  (<sup>:email:</sup>) corresponding author.
+>
+> *arXiv technical report ([arXiv 2108.11250](https://arxiv.org/abs/2108.11250))*
+
+---
+
 ### The Illustration of YOLOP
+
 ![yolop](pictures/yolop.png)
 
 ### Contributions
@@ -259,5 +272,14 @@ Our model can reason in real-time on `Jetson Tx2`, with `Zed Camera` to capture 
 
 ## Citation
 
-If you find our paper and code useful for your research, please consider giving a star :star:  !
+If you find our paper and code useful for your research, please consider giving a star :star:   and citation :pencil: :
+
+```BibTeX
+@misc{2108.11250,
+Author = {Dong Wu and Manwen Liao and Weitian Zhang and Xinggang Wang},
+Title = {YOLOP: You Only Look Once for Panoptic Driving Perception},
+Year = {2021},
+Eprint = {arXiv:2108.11250},
+}
+```
 
