@@ -3,7 +3,7 @@
 ## You Only :eyes: Once for Panoptic ​ :car: Perception
 > [**You Only Look at Once for Panoptic driving Perception**](https://arxiv.org/abs/2108.11250)
 >
-> by Dong Wu, Manwen Liao, WeiTian Zhang, [Xinggang Wang](https://xinggangw.info/)<sup> :email:</sup>
+> by Dong Wu, Manwen Liao, Weitian Zhang, [Xinggang Wang](https://xinggangw.info/)<sup> :email:</sup>
 >
 > [*School of EIC, HUST*](http://eic.hust.edu.cn/English/Home.htm)
 >
