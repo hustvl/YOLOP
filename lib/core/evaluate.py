@@ -1,5 +1,3 @@
-# 计算各种指标
-
 # Model validation metrics
 
 from pathlib import Path

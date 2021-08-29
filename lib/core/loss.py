@@ -13,7 +13,7 @@ class MultiHeadLoss(nn.Module):
         Inputs:
         - losses: (list)[nn.Module, nn.Module, ...]
         - cfg: config object
-        - lambdas: (list) + IoU loss, 各个loss的权重
+        - lambdas: (list) + IoU loss, weight for each loss
         """
         super().__init__()
         # lambdas: [cls, obj, iou, la_seg, ll_seg, ll_iou]
@@ -28,17 +28,14 @@ class MultiHeadLoss(nn.Module):
     def forward(self, head_fields, head_targets, shapes, model):
         """
         Inputs:
-        - head_fields: (list)各个head输出的数据
-        - head_targets: (list)各个head对应的gt
+        - head_fields: (list) output from each task head
+        - head_targets: (list) ground-truth for each task head
         - model:
 
         Returns:
         - total_loss: sum of all the loss
-        - head_losses: (tuple) 包含所有loss[loss1, loss2, ...]
+        - head_losses: (tuple) contain all loss[loss1, loss2, ...]
 
-        More:
-        我感觉head_losses 也可以做成字典, 比如'classification':loss1
-        看哪个比较方便
         """
         # head_losses = [ll
         #                 for l, f, t in zip(self.losses, head_fields, head_targets)
@@ -183,9 +180,6 @@ def get_loss(cfg, device):
     Returns:
     -loss: (MultiHeadLoss)
 
-    More:
-    通过loss的种类调用各种loss,组成一个list
-    用这个list调用MultiHeadLoss类
     """
     # class loss criteria
     BCEcls = nn.BCEWithLogitsLoss(pos_weight=torch.Tensor([cfg.LOSS.CLS_POS_WEIGHT])).to(device)
@@ -214,8 +208,8 @@ def smooth_BCE(eps=0.1):  # https://github.com/ultralytics/yolov3/issues/238#iss
 class FocalLoss(nn.Module):
     # Wraps focal loss around existing loss_fcn(), i.e. criteria = FocalLoss(nn.BCEWithLogitsLoss(), gamma=1.5)
     def __init__(self, loss_fcn, gamma=1.5, alpha=0.25):
-        # alpha 正负样本平衡
-        # gamma 困难样本挖掘
+        # alpha  balance positive & negative samples
+        # gamma  focus on difficult samples
         super(FocalLoss, self).__init__()
         self.loss_fcn = loss_fcn  # must be nn.BCEWithLogitsLoss()
         self.gamma = gamma

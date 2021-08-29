@@ -13,7 +13,7 @@ from ..utils import letterbox, augment_hsv, random_perspective, xyxy2xywh, cutou
 
 class AutoDriveDataset(Dataset):
     """
-    A general Dataset 用于实现一些通用服务
+    A general Dataset for some common function
     """
     def __init__(self, cfg, is_train, inputsize=640, transform=None):
         """
@@ -21,7 +21,7 @@ class AutoDriveDataset(Dataset):
 
         Inputs:
         -cfg: configurations
-        -is_train: bool,判断是否是训练集
+        -is_train(bool): whether train set or not
         -transform: ToTensor and Normalize
         
         Returns:
@@ -61,13 +61,13 @@ class AutoDriveDataset(Dataset):
     
     def _get_db(self):
         """
-        在子数据集上完成，不删
+        finished on children Dataset(for dataset which is not in Bdd100k format, rewrite children Dataset)
         """
         raise NotImplementedError
 
     def evaluate(self, cfg, preds, output_dir):
         """
-        在子数据集上完成，不删
+        finished on children dataset
         """
         raise NotImplementedError
     
@@ -79,15 +79,15 @@ class AutoDriveDataset(Dataset):
 
     def __getitem__(self, idx):
         """
-        获取database里的图片和标签，并对他们做数据增强
+        Get input and groud-truth from database & add data augmentation on input
 
         Inputs:
-        -idx: 图片在self.db(database)(list)里的索引
+        -idx: the index of image in self.db(database)(list)
         self.db(list) [a,b,c,...]
         a: (dictionary){'image':, 'information':}
 
         Returns:
-        -image: transformed image, 先通过自己的数据增强(type:numpy), 然后使用self.transform
+        -image: transformed image, first passed the data augmentation in __getitem__ function(type:numpy), then apply self.transform
         -target: ground truth(det_gt,seg_gt)
 
         function maybe useful
@@ -239,14 +239,13 @@ class AutoDriveDataset(Dataset):
 
     def select_data(self, db):
         """
-        可以用这个函数对数据集中的数据进行过滤，
-        不需要使用的话可以直接把这个函数删掉
+        You can use this function to filter useless images in the dataset
 
         Inputs:
-        -db: (list)数据集
+        -db: (list)database
 
         Returns:
-        -db_selected: (list)过滤后的数据集
+        -db_selected: (list)filtered dataset
         """
         db_selected = ...
         return db_selected
