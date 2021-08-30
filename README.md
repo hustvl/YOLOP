@@ -136,7 +136,6 @@
 │ │ ├─train.py    
 ├─toolkits
 │ │ ├─depoly    # Deployment of model
-│ │ ├─label_conversion
 ├─weights    # Pretraining model
 ```
 
@@ -156,29 +155,36 @@ See `requirements.txt` for additional dependencies and version requirements.
 pip install -r requirements.txt
 ```
 
-
 ### Data preparation
 
-Download `BDD100k dataset`  from [link](https://bdd-data.berkeley.edu/),  and convert the label into the form of training requirements. 
+#### Download
 
-- The annotations of detection  just need to keep the original format. (Each `.jpg`  corresponds to one `.json`)
-- The annotations of drivable area segmentation need to be binary image. (Each `.jpg`  corresponds to one `.png`)
-- The annotations of lane line segmentation need to be binary image. (Each `.jpg` corresponds to one `.png`)
+- Download the images from [images](https://bdd-data.berkeley.edu/).
 
-We provide the code for conversion of label in `./toolkits/label_conversion`.  We recommend the directory structure to be the following:
+- Download the annotations of detection from [det_annotations](https://drive.google.com/file/d/1Ge-R8NTxG1eqd4zbryFo-1Uonuh0Nxyl/view?usp=sharing). 
+- Download the annotations of drivable area segmentation from [da_seg_annotations](https://drive.google.com/file/d/1xy_DhUZRHR8yrZG3OwTQAHhYTnXn7URv/view?usp=sharing). 
+- Download the annotations of lane line segmentation from [ll_seg_annotations](https://drive.google.com/file/d/1lDNTPIQj_YLNZVkksKM25CvCHuquJ8AP/view?usp=sharing). 
+
+We recommend the dataset directory structure to be the following:
 
 ```
 # The id represent the correspondence relation
 ├─dataset root
-│ ├─images/ id.jpg
-│ ├─det_annotations/ id.json
-│ ├─da_seg_annotations/ id.png
-│ ├─ll_seg_annotations/ id.png
+│ ├─images
+│ │ ├─train
+│ │ ├─val
+│ ├─det_annotations
+│ │ ├─train
+│ │ ├─val
+│ ├─da_seg_annotations
+│ │ ├─train
+│ │ ├─val
+│ ├─ll_seg_annotations
+│ │ ├─train
+│ │ ├─val
 ```
 
 Update the your dataset path in the `./lib/config/default.py`.
-
-
 
 ### Training
 
