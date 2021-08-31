@@ -40,7 +40,7 @@ transform=transforms.Compose([
 
 def detect(cfg,opt):
 
-    logger, final_output_dir, tb_log_dir = create_logger(
+    logger, _, _ = create_logger(
         cfg, cfg.LOG_DIR, 'demo')
 
     device = select_device(logger,opt.device)
@@ -84,6 +84,7 @@ def detect(cfg,opt):
     nms_time = AverageMeter()
     
     for i, (path, img, img_det, vid_cap,shapes) in tqdm(enumerate(dataset),total = len(dataset)):
+        print("1")
         img = transform(img).to(device)
         img = img.half() if half else img.float()  # uint8 to fp16/32
         if img.ndimension() == 3:
@@ -93,7 +94,7 @@ def detect(cfg,opt):
         det_out, da_seg_out,ll_seg_out= model(img)
         t2 = time_synchronized()
 
-        inf_out,train_out = det_out
+        inf_out, _ = det_out
         inf_time.update(t2-t1,img.size(0))
 
         # Apply NMS

@@ -49,7 +49,7 @@ def create_logger(cfg, cfg_path, phase='train', rank=-1):
         return None, None, None
 
 
-def select_device(logger, device='', batch_size=None):
+def select_device(logger=None, device='', batch_size=None):
     # device = 'cpu' or '0' or '0,1,2,3'
     cpu_request = device.lower() == 'cpu'
     if device and not cpu_request:  # if device requested other than 'cpu'
@@ -70,7 +70,8 @@ def select_device(logger, device='', batch_size=None):
             if logger:
                 logger.info("%sCUDA:%g (%s, %dMB)" % (s, i, x[i].name, x[i].total_memory / c))
     else:
-        logger.info(f'Using torch {torch.__version__} CPU')
+        if logger:
+            logger.info(f'Using torch {torch.__version__} CPU')
 
     if logger:
         logger.info('')  # skip a line
