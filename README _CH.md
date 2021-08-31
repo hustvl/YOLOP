@@ -11,7 +11,7 @@
 
 ---
 
-[English Document](Readme.md)
+[English Document](https://github.com/hustvl/YOLOP)
 
 ### YOLOP框架
 

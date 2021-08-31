@@ -11,7 +11,7 @@
 
 ---
 
-[中文文档](README_CH.md)
+[中文文档](https://github.com/hustvl/YOLOP/blob/main/README%20_CH.md)
 
 ### The Illustration of YOLOP
 
