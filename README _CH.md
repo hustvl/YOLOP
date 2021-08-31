@@ -11,23 +11,23 @@
 
 ---
 
-[中文文档](README_CH.md)
+[English Document](Readme.md)
 
-### The Illustration of YOLOP
+### YOLOP框架
 
 ![yolop](pictures/yolop.png)
 
-### Contributions
+### 贡献
 
-* We put forward an efficient multi-task network that can jointly handle three crucial tasks in autonomous driving: object detection, drivable area segmentation and lane detection to save computational costs, reduce inference time as well as improve the performance of each task. Our work is the first to reach real-time on embedded devices while maintaining state-of-the-art level performance on the `BDD100K `dataset.
+* 我们提出了一种高效的多任务网络，该网络可以联合处理自动驾驶中的目标检测、可驾驶区域分割和车道检测三个关键任务。不但节省了计算成本，减少了推理时间，还提高了各个任务的性能。我们的工作是第一个在嵌入式设备上实现实时，同时在`BDD100K`数据集上保持`SOTA`（最先进的）性能水平。
 
-* We design the ablative experiments to verify the effectiveness of our multi-tasking scheme. It is proved that the three tasks can be learned jointly without tedious alternating optimization.
+* 我们设计了消融实验来验证我们的多任务方案的有效性。证明了这三个任务不需要繁琐的交替优化就可以联合学习。
 
   
 
-### Results
+### 实验结果
 
-#### Traffic Object Detection Result
+#### 交通目标检测结果：
 
 | Model          | Recall(%) | mAP50(%) | Speed(fps) |
 | -------------- | --------- | -------- | ---------- |
@@ -36,7 +36,7 @@
 | `Faster R-CNN` | 77.2      | 55.6     | 5.3        |
 | `YOLOv5s`      | 86.8      | 77.2     | 82         |
 | `YOLOP(ours)`  | 89.2      | 76.5     | 41         |
-#### Drivable Area Segmentation Result
+#### 可行驶区域分割结果：
 
 | Model         | mIOU(%) | Speed(fps) |
 | ------------- | ------- | ---------- |
@@ -45,7 +45,7 @@
 | `PSPNet`      | 89.6    | 11.1       |
 | `YOLOP(ours)` | 91.5    | 41         |
 
-#### Lane Detection Result:
+#### 车道线检测结果:
 
 | Model         | mIOU(%) | IOU(%) |
 | ------------- | ------- | ------ |
@@ -54,7 +54,7 @@
 | `ENet-SAD`    | 36.56   | 16.02  |
 | `YOLOP(ours)` | 70.50   | 26.20  |
 
-#### Ablation Studies 1: End-to-end v.s. Step-by-step:
+#### 消融实验 1: 端对端训练 v.s. 分步训练:
 
 | Training_method | Recall(%) | AP(%) | mIoU(%) | Accuracy(%) | IoU(%) |
 | --------------- | --------- | ----- | ------- | ----------- | ------ |
@@ -64,7 +64,7 @@
 | `ED-S-W`        | 87.5      | 76.1  | 91.6    | 68.0        | 26.8   |
 | `End-to-end`    | 89.2      | 76.5  | 91.5    | 70.5        | 26.2   |
 
-#### Ablation Studies 2: Multi-task v.s. Single task:
+#### 消融实验 2: 多任务学习 v.s. 单任务学习:
 
 | Training_method | Recall(%) | AP(%) | mIoU(%) | Accuracy(%) | IoU(%) | Speed(ms/frame) |
 | --------------- | --------- | ----- | ------- | ----------- | ------ | --------------- |
@@ -75,28 +75,28 @@
 
 **Notes**: 
 
-- The works we has use for reference including `Multinet`  ([paper](https://arxiv.org/pdf/1612.07695.pdf?utm_campaign=affiliate-ir-Optimise%20media%28%20South%20East%20Asia%29%20Pte.%20ltd._156_-99_national_R_all_ACQ_cpa_en&utm_content=&utm_source=%20388939),[code](https://github.com/MarvinTeichmann/MultiNet)）,`DLT-Net`   ([paper](https://ieeexplore.ieee.org/abstract/document/8937825)）,`Faster R-CNN`  ([paper](https://proceedings.neurips.cc/paper/2015/file/14bfa6bb14875e45bba028a21ed38046-Paper.pdf),[code](https://github.com/ShaoqingRen/faster_rcnn)）,`YOLOv5s`（[code](https://github.com/ultralytics/yolov5))  ,`PSPNet`([paper](https://openaccess.thecvf.com/content_cvpr_2017/papers/Zhao_Pyramid_Scene_Parsing_CVPR_2017_paper.pdf),[code](https://github.com/hszhao/PSPNet)) ,`ENet`([paper](https://arxiv.org/pdf/1606.02147.pdf),[code](https://github.com/osmr/imgclsmob))    `SCNN`([paper](https://www.aaai.org/ocs/index.php/AAAI/AAAI18/paper/download/16802/16322),[code](https://github.com/XingangPan/SCNN))    `SAD-ENet`([paper](https://openaccess.thecvf.com/content_ICCV_2019/papers/Hou_Learning_Lightweight_Lane_Detection_CNNs_by_Self_Attention_Distillation_ICCV_2019_paper.pdf),[code](https://github.com/cardwing/Codes-for-Lane-Detection)). Thanks for their wonderful works.
-- In table 4, E, D, S and W refer to Encoder, Detect head, two Segment heads and whole network. So the Algorithm (First, we only train Encoder and Detect head. Then we freeze the Encoder and Detect head as well as train two Segmentation heads. Finally, the entire network is trained jointly for all three tasks.) can be marked as ED-S-W, and the same for others.
+- 我们工作参考了以下工作： `Multinet`  ([论文](https://arxiv.org/pdf/1612.07695.pdf?utm_campaign=affiliate-ir-Optimise%20media%28%20South%20East%20Asia%29%20Pte.%20ltd._156_-99_national_R_all_ACQ_cpa_en&utm_content=&utm_source=%20388939),[代码](https://github.com/MarvinTeichmann/MultiNet)）,`DLT-Net`   ([论文](https://ieeexplore.ieee.org/abstract/document/8937825)）,`Faster R-CNN`  ([论文](https://proceedings.neurips.cc/paper/2015/file/14bfa6bb14875e45bba028a21ed38046-Paper.pdf),[代码](https://github.com/ShaoqingRen/faster_rcnn)）,`YOLOv5`（[代码](https://github.com/ultralytics/yolov5))  ,`PSPNet`([论文](https://openaccess.thecvf.com/content_cvpr_2017/papers/Zhao_Pyramid_Scene_Parsing_CVPR_2017_paper.pdf),[代码](https://github.com/hszhao/PSPNet)) ,`ENet`([论文](https://arxiv.org/pdf/1606.02147.pdf),[代码](https://github.com/osmr/imgclsmob))    `SCNN`([论文](https://www.aaai.org/ocs/index.php/AAAI/AAAI18/paper/download/16802/16322),[代码](https://github.com/XingangPan/SCNN))    `SAD-ENet`([论文](https://openaccess.thecvf.com/content_ICCV_2019/papers/Hou_Learning_Lightweight_Lane_Detection_CNNs_by_Self_Attention_Distillation_ICCV_2019_paper.pdf),[代码](https://github.com/cardwing/Codes-for-Lane-Detection)). 感谢他们精彩的工作
+- 在表 4中, E, D, S 和 W 分别代表 编码器（Encoder）, 检测头（Detect head）, 两个分割头（Segment heads）和整个网络（whole network）. 所以算法 (首先，我们只训练编码器和检测头。然后我们冻结编码器和检测头只训练两个分割头。最后，整个网络进行联合训练三个任务) 可以被记作 `ED-S-W`，以此类推。
 
 ---
 
-### Visualization
+### 可视化
 
-#### Traffic Object Detection Result
+#### 交通目标检测结果
 
 ![detect result](pictures/detect.png)
 
-#### Drivable Area Segmentation Result
+#### 可行驶区域分割结果
 
 ![](pictures/da.png)
 
-#### Lane Detection Result
+#### 车道线分割结果
 
 ![](pictures/ll.png)
 
-**Notes**: 
+**注意点**: 
 
-- The visualization of lane detection result has been post processed by quadratic fitting.
+- 车道线分割结果是经过曲线拟合的.
 
 ---
 
@@ -145,13 +145,13 @@
 
 ### Requirement
 
-This codebase has been developed with python version 3.7, PyTorch 1.7+ and torchvision 0.8+:
+整个代码库是在 python 3.版本, PyTorch 1.7+版本和 torchvision 0.8+版本上开发的:
 
 ```
 conda install pytorch==1.7.0 torchvision==0.8.0 cudatoolkit=10.2 -c pytorch
 ```
 
-See `requirements.txt` for additional dependencies and version requirements.
+其他依赖库的版本要求详见`requirements.txt`：
 
 ```setup
 pip install -r requirements.txt
@@ -161,16 +161,15 @@ pip install -r requirements.txt
 
 #### Download
 
-- Download the images from [images](https://bdd-data.berkeley.edu/).
+- 从 [images](https://bdd-data.berkeley.edu/)下载图片数据集
 
-- Download the annotations of detection from [det_annotations](https://drive.google.com/file/d/1Ge-R8NTxG1eqd4zbryFo-1Uonuh0Nxyl/view?usp=sharing). 
-- Download the annotations of drivable area segmentation from [da_seg_annotations](https://drive.google.com/file/d/1xy_DhUZRHR8yrZG3OwTQAHhYTnXn7URv/view?usp=sharing). 
-- Download the annotations of lane line segmentation from [ll_seg_annotations](https://drive.google.com/file/d/1lDNTPIQj_YLNZVkksKM25CvCHuquJ8AP/view?usp=sharing). 
+- 从 [det_annotations](https://drive.google.com/file/d/1Ge-R8NTxG1eqd4zbryFo-1Uonuh0Nxyl/view?usp=sharing)下载检测任务的标签
+- 从 [da_seg_annotations](https://drive.google.com/file/d/1xy_DhUZRHR8yrZG3OwTQAHhYTnXn7URv/view?usp=sharing)下载可行驶区域分割任务的标签
+- 从 [ll_seg_annotations](https://drive.google.com/file/d/1lDNTPIQj_YLNZVkksKM25CvCHuquJ8AP/view?usp=sharing)下载车道线分割任务的标签
 
-We recommend the dataset directory structure to be the following:
+我们推荐按照如下图片数据集文件结构:
 
 ```
-# The id represent the correspondence relation
 ├─dataset root
 │ ├─images
 │ │ ├─train
@@ -186,13 +185,15 @@ We recommend the dataset directory structure to be the following:
 │ │ ├─val
 ```
 
-Update the your dataset path in the `./lib/config/default.py`.
+在 `./lib/config/default.py`下更新数据集的路径配置。
 
-### Training
+### 模型训练
 
-You can set the training configuration in the `./lib/config/default.py`. (Including:  the loading of preliminary model,  loss,  data augmentation, optimizer, warm-up and cosine annealing, auto-anchor, training epochs, batch_size).
+你可以在 `./lib/config/default.py`设定训练配置. (包括:  预训练模型的读取，损失函数， 数据增强，optimizer，训练预热和余弦退火，自动anchor，训练轮次epoch, batch_size)
 
-If you want try alternating optimization or train model for single task, please modify the corresponding configuration in `./lib/config/default.py` to `True`. (As following, all configurations is `False`, which means training multiple tasks end to end).
+
+
+如果你想尝试交替优化或者单一任务学习，可以在`./lib/config/default.py` 中将对应的配置选项修改为 `True`。(如下，所有的配置都是 `False`, which means training multiple tasks end to end)。
 
 ```python
 # Alternating optimization
@@ -207,7 +208,7 @@ _C.TRAIN.LANE_ONLY = False          # Only train ll_segmentation task
 _C.TRAIN.DET_ONLY = False          # Only train detection task
 ```
 
-Start training:
+开始训练:
 
 ```shell
 python tools/train.py
@@ -215,11 +216,11 @@ python tools/train.py
 
 
 
-### Evaluation
+### 模型评测
 
-You can set the evaluation configuration in the `./lib/config/default.py`. (Including： batch_size and threshold value for nms).
+你可以在 `./lib/config/default.py`设定测试配置(包括： batch_size 以及  nms的阈值).
 
-Start evaluating:
+开始评测:
 
 ```shell
 python tools/test.py --weights weights/End-to-end.pth
@@ -227,13 +228,13 @@ python tools/test.py --weights weights/End-to-end.pth
 
 
 
-### Demo Test
+### Demo测试
 
-We provide two testing method.
+我们提供两种测试方案
 
-#### Folder
+#### 
 
-You can store the image or video in `--source`, and then save the reasoning result to `--save-dir`
+测试所使用的的图片存储在 `--source`下, 然后测试结果会保存在 `--save-dir`下：
 
 ```shell
 python tools/demo --source inference/images
@@ -241,9 +242,9 @@ python tools/demo --source inference/images
 
 
 
-#### Camera
+#### 相机实时
 
-If there are any camera connected to your computer, you can set the `source` as the camera number(The default is 0).
+如果你的计算机连接了摄像头, 你可以将 `source` 设为摄像头的序号(默认值为 0).
 
 ```shell
 python tools/demo --source 0
@@ -251,7 +252,7 @@ python tools/demo --source 0
 
 
 
-#### Demonstration
+#### 展示
 
 <table>
     <tr>
@@ -270,15 +271,15 @@ python tools/demo --source 0
 
 
 
-### Deployment
+### 部署
 
-Our model can reason in real-time on `Jetson Tx2`, with `Zed Camera` to capture image. We use `TensorRT` tool for speeding up. We provide code for deployment and reasoning of model in  `./tools/deploy`. 
+我们的模型可以在 `Jetson Tx2`上 连接`Zed Camera` 实时推理。我们使用 `TensorRT` 工具进行推理加速。我们在  `./tools/deploy`提供模型部署和推理的全部代码。 
 
 
 
-## Citation
+## 引用
 
-If you find our paper and code useful for your research, please consider giving a star :star:   and citation :pencil: :
+如果你发现我们的代码和论文对你的研究有帮助， 可以考虑给我们 star :star:   和引用 :pencil: :
 
 ```BibTeX
 @misc{2108.11250,
