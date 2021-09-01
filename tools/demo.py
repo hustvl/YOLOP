@@ -84,7 +84,6 @@ def detect(cfg,opt):
     nms_time = AverageMeter()
     
     for i, (path, img, img_det, vid_cap,shapes) in tqdm(enumerate(dataset),total = len(dataset)):
-        print("1")
         img = transform(img).to(device)
         img = img.half() if half else img.float()  # uint8 to fp16/32
         if img.ndimension() == 3:
@@ -93,7 +92,8 @@ def detect(cfg,opt):
         t1 = time_synchronized()
         det_out, da_seg_out,ll_seg_out= model(img)
         t2 = time_synchronized()
-
+        if i == 0:
+            print(det_out)
         inf_out, _ = det_out
         inf_time.update(t2-t1,img.size(0))
 
