@@ -26,7 +26,7 @@ const char* OUTPUT_SEG_NAME = "seg";
 const char* OUTPUT_LANE_NAME = "lane";
 static Logger gLogger;
 
-ICudaEngine* build_engine(unsigned int maxBatchSize, IBuilder* builder, IBuilderConfig* config, DataType dt, float& gd, float& gw, std::string& wts_name) {
+ICudaEngine* build_engine(unsigned int maxBatchSize, IBuilder* builder, IBuilderConfig* config, DataType dt, std::string& wts_name) {
     INetworkDefinition* network = builder->createNetworkV2(0U);
 
     // Create input tensor of shape {3, INPUT_H, INPUT_W} with name INPUT_BLOB_NAME
@@ -95,69 +95,65 @@ ICudaEngine* build_engine(unsigned int maxBatchSize, IBuilder* builder, IBuilder
     auto detect24 = addYoLoLayer(network, weightMap, det0, det1, det2);
     detect24->getOutput(0)->setName(OUTPUT_DET_NAME);
 
-    auto conv25 = convBlock(network, weightMap, *cat16->getOutput(0), 64, 3, 1, 1, "model.25");
+    auto conv25 = convBlock(network, weightMap, *cat16->getOutput(0), 128, 3, 1, 1, "model.25");
     // upsample 26
-    Weights deconvwts26{ DataType::kFLOAT, deval, 64 * 2 * 2 };
-    IDeconvolutionLayer* deconv26 = network->addDeconvolutionNd(*conv25->getOutput(0), 64, DimsHW{ 2, 2 }, deconvwts26, emptywts);
+    Weights deconvwts26{ DataType::kFLOAT, deval, 128 * 2 * 2 };
+    IDeconvolutionLayer* deconv26 = network->addDeconvolutionNd(*conv25->getOutput(0), 128, DimsHW{ 2, 2 }, deconvwts26, emptywts);
     deconv26->setStrideNd(DimsHW{ 2, 2 });
-    deconv26->setNbGroups(64);
+    deconv26->setNbGroups(128);
     
-    ITensor* inputTensors27[] = { deconv26->getOutput(0), bottleneck_CSP2->getOutput(0) };
-    auto cat27 = network->addConcatenation(inputTensors27, 2);
-    auto bottleneck_csp28 = bottleneckCSP(network, weightMap, *cat27->getOutput(0), 128, 64, 1, false, 1, 0.5, "model.28");
-    auto conv29 = convBlock(network, weightMap, *bottleneck_csp28->getOutput(0), 32, 3, 1, 1, "model.29");
-    // upsample 30
-    Weights deconvwts30{ DataType::kFLOAT, deval, 32 * 2 * 2 };
-    IDeconvolutionLayer* deconv30 = network->addDeconvolutionNd(*conv29->getOutput(0), 32, DimsHW{ 2, 2 }, deconvwts30, emptywts);
-    deconv30->setStrideNd(DimsHW{ 2, 2 });
-    deconv30->setNbGroups(32);
+    auto bottleneck_csp27 = bottleneckCSP(network, weightMap, *deconv26->getOutput(0), 128, 64, 1, false, 1, 0.5, "model.27");
+    auto conv28 = convBlock(network, weightMap, *bottleneck_csp27->getOutput(0), 32, 3, 1, 1, "model.28");
+    // upsample 29
+    Weights deconvwts29{ DataType::kFLOAT, deval, 32 * 2 * 2 };
+    IDeconvolutionLayer* deconv29 = network->addDeconvolutionNd(*conv28->getOutput(0), 32, DimsHW{ 2, 2 }, deconvwts29, emptywts);
+    deconv29->setStrideNd(DimsHW{ 2, 2 });
+    deconv29->setNbGroups(32);
 
-    auto conv31 = convBlock(network, weightMap, *deconv30->getOutput(0), 16, 3, 1, 1, "model.31");
-    auto bottleneck_csp32 = bottleneckCSP(network, weightMap, *conv31->getOutput(0), 16, 8, 1, false, 1, 0.5, "model.32");
+    auto conv30 = convBlock(network, weightMap, *deconv29->getOutput(0), 16, 3, 1, 1, "model.30");
+    auto bottleneck_csp31 = bottleneckCSP(network, weightMap, *conv30->getOutput(0), 16, 8, 1, false, 1, 0.5, "model.31");
 
-    // upsample33
-    Weights deconvwts33{ DataType::kFLOAT, deval, 8 * 2 * 2 };
-    IDeconvolutionLayer* deconv33 = network->addDeconvolutionNd(*bottleneck_csp32->getOutput(0), 8, DimsHW{ 2, 2 }, deconvwts33, emptywts);
-    deconv33->setStrideNd(DimsHW{ 2, 2 });
-    deconv33->setNbGroups(8);
+    // upsample32
+    Weights deconvwts32{ DataType::kFLOAT, deval, 8 * 2 * 2 };
+    IDeconvolutionLayer* deconv32 = network->addDeconvolutionNd(*bottleneck_csp31->getOutput(0), 8, DimsHW{ 2, 2 }, deconvwts32, emptywts);
+    deconv32->setStrideNd(DimsHW{ 2, 2 });
+    deconv32->setNbGroups(8);
 
-    auto conv34 = convBlock(network, weightMap, *deconv33->getOutput(0), 3, 3, 1, 1, "model.34");
+    auto conv33 = convBlock(network, weightMap, *deconv32->getOutput(0), 3, 3, 1, 1, "model.33");
     // segmentation output
-    ISliceLayer *slicelayer = network->addSlice(*conv34->getOutput(0), Dims3{ 0, (Yolo::INPUT_H - Yolo::IMG_H) / 2, 0 }, Dims3{ 3, Yolo::IMG_H, Yolo::IMG_W }, Dims3{ 1, 1, 1 });
+    ISliceLayer *slicelayer = network->addSlice(*conv33->getOutput(0), Dims3{ 0, (Yolo::INPUT_H - Yolo::IMG_H) / 2, 0 }, Dims3{ 3, Yolo::IMG_H, Yolo::IMG_W }, Dims3{ 1, 1, 1 });
     auto segout = network->addTopK(*slicelayer->getOutput(0), TopKOperation::kMAX, 1, 1);
     segout->getOutput(1)->setName(OUTPUT_SEG_NAME);
 
-    auto conv35 = convBlock(network, weightMap, *cat16->getOutput(0), 64, 3, 1, 1, "model.35");
+    auto conv34 = convBlock(network, weightMap, *cat16->getOutput(0), 128, 3, 1, 1, "model.34");
 
-    // upsample36
-    Weights deconvwts36{ DataType::kFLOAT, deval, 64 * 2 * 2 };
-    IDeconvolutionLayer* deconv36 = network->addDeconvolutionNd(*conv35->getOutput(0), 64, DimsHW{ 2, 2 }, deconvwts36, emptywts);
-    deconv36->setStrideNd(DimsHW{ 2, 2 });
-    deconv36->setNbGroups(64);
+    // upsample35
+    Weights deconvwts35{ DataType::kFLOAT, deval, 128 * 2 * 2 };
+    IDeconvolutionLayer* deconv35 = network->addDeconvolutionNd(*conv34->getOutput(0), 128, DimsHW{ 2, 2 }, deconvwts35, emptywts);
+    deconv35->setStrideNd(DimsHW{ 2, 2 });
+    deconv35->setNbGroups(128);
 
-    ITensor* inputTensors37[] = { deconv36->getOutput(0), bottleneck_CSP2->getOutput(0) };
-    auto cat37 = network->addConcatenation(inputTensors37, 2);
-    auto bottleneck_csp38 = bottleneckCSP(network, weightMap, *cat37->getOutput(0), 128, 64, 1, false, 1, 0.5, "model.38");
-    auto conv39 = convBlock(network, weightMap, *bottleneck_csp38->getOutput(0), 32, 3, 1, 1, "model.39");
+    auto bottleneck_csp36 = bottleneckCSP(network, weightMap, *deconv35->getOutput(0), 128, 64, 1, false, 1, 0.5, "model.36");
+    auto conv37 = convBlock(network, weightMap, *bottleneck_csp36->getOutput(0), 32, 3, 1, 1, "model.37");
     
-    // upsample40
-    Weights deconvwts40{ DataType::kFLOAT, deval, 32 * 2 * 2 };
-    IDeconvolutionLayer* deconv40 = network->addDeconvolutionNd(*conv39->getOutput(0), 32, DimsHW{ 2, 2 }, deconvwts40, emptywts);
-    deconv40->setStrideNd(DimsHW{ 2, 2 });
-    deconv40->setNbGroups(32);
+    // upsample38
+    Weights deconvwts38{ DataType::kFLOAT, deval, 32 * 2 * 2 };
+    IDeconvolutionLayer* deconv38 = network->addDeconvolutionNd(*conv37->getOutput(0), 32, DimsHW{ 2, 2 }, deconvwts38, emptywts);
+    deconv38->setStrideNd(DimsHW{ 2, 2 });
+    deconv38->setNbGroups(32);
 
-    auto conv41 = convBlock(network, weightMap, *deconv40->getOutput(0), 16, 3, 1, 1, "model.41");
-    auto bottleneck_csp42 = bottleneckCSP(network, weightMap, *conv41->getOutput(0), 16, 8, 1, false, 1, 0.5, "model.42");
+    auto conv39 = convBlock(network, weightMap, *deconv38->getOutput(0), 16, 3, 1, 1, "model.39");
+    auto bottleneck_csp40 = bottleneckCSP(network, weightMap, *conv39->getOutput(0), 16, 8, 1, false, 1, 0.5, "model.40");
 
-    // upsample43
-    Weights deconvwts43{ DataType::kFLOAT, deval, 8 * 2 * 2 };
-    IDeconvolutionLayer* deconv43 = network->addDeconvolutionNd(*bottleneck_csp42->getOutput(0), 8, DimsHW{ 2, 2 }, deconvwts43, emptywts);
-    deconv43->setStrideNd(DimsHW{ 2, 2 });
-    deconv43->setNbGroups(8);
+    // upsample41
+    Weights deconvwts41{ DataType::kFLOAT, deval, 8 * 2 * 2 };
+    IDeconvolutionLayer* deconv41 = network->addDeconvolutionNd(*bottleneck_csp40->getOutput(0), 8, DimsHW{ 2, 2 }, deconvwts41, emptywts);
+    deconv41->setStrideNd(DimsHW{ 2, 2 });
+    deconv41->setNbGroups(8);
 
-    auto conv44 = convBlock(network, weightMap, *deconv43->getOutput(0), 2, 3, 1, 1, "model.44");
+    auto conv42 = convBlock(network, weightMap, *deconv41->getOutput(0), 2, 3, 1, 1, "model.42");
     // lane-det output
-    ISliceLayer *laneSlice = network->addSlice(*conv44->getOutput(0), Dims3{ 0, (Yolo::INPUT_H - Yolo::IMG_H) / 2, 0 }, Dims3{ 2, Yolo::IMG_H, Yolo::IMG_W }, Dims3{ 1, 1, 1 });
+    ISliceLayer *laneSlice = network->addSlice(*conv42->getOutput(0), Dims3{ 0, (Yolo::INPUT_H - Yolo::IMG_H) / 2, 0 }, Dims3{ 2, Yolo::IMG_H, Yolo::IMG_W }, Dims3{ 1, 1, 1 });
     auto laneout = network->addTopK(*laneSlice->getOutput(0), TopKOperation::kMAX, 1, 1);
     laneout->getOutput(1)->setName(OUTPUT_LANE_NAME);
    
@@ -211,13 +207,13 @@ ICudaEngine* build_engine(unsigned int maxBatchSize, IBuilder* builder, IBuilder
     return engine;
 }
 
-void APIToModel(unsigned int maxBatchSize, IHostMemory** modelStream, float& gd, float& gw, std::string& wts_name) {
+void APIToModel(unsigned int maxBatchSize, IHostMemory** modelStream, std::string& wts_name) {
     // Create builder
     IBuilder* builder = createInferBuilder(gLogger);
     IBuilderConfig* config = builder->createBuilderConfig();
 
     // Create model to populate the network, then set the outputs and create an engine
-    ICudaEngine* engine = build_engine(maxBatchSize, builder, config, DataType::kFLOAT, gd, gw, wts_name);
+    ICudaEngine* engine = build_engine(maxBatchSize, builder, config, DataType::kFLOAT, wts_name);
     assert(engine != nullptr);
 
     // Serialize the engine

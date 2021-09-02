@@ -18,7 +18,7 @@ int main(int argc, char** argv) {
     // create a model using the API directly and serialize it to a stream
     if (!wts_name.empty()) {
         IHostMemory* modelStream{ nullptr };
-        APIToModel(BATCH_SIZE, &modelStream, gd, gw, wts_name);
+        APIToModel(BATCH_SIZE, &modelStream, wts_name);
         assert(modelStream != nullptr);
         std::ofstream p(engine_name, std::ios::binary);
         if (!p) {

@@ -272,8 +272,21 @@ python tools/demo --source 0
 
 ### Deployment
 
-Our model can reason in real-time on `Jetson Tx2`, with `Zed Camera` to capture image. We use `TensorRT` tool for speeding up. We provide code for deployment and reasoning of model in  `./toolkits/deploy`. 
+Our model can reason in real-time on `Jetson Tx2`, with `Zed Camera` to capture image. We use `TensorRT` tool for speeding up. We provide code for deployment and reasoning of model in  `./toolkits/deploy`.
 
+#### Model Transfer
+
+Before reasoning with TensorRT C++ API, you need to transfer the `.pth` file into binary file which can be read by C++.
+
+```shell
+python toolkits/deploy/gen_wts.py
+```
+
+After running the above command, you obtain a binary file named `yolop.wts`.
+
+#### Running Inference
+
+TensorRT needs an engine file for inference. Building an engine is time-consuming. It is convenient to save an engine file so that you can reuse it every time you run the inference. The process is integrated in `main.cpp`. It can determine whether to build an engine according to the existence of your engine file.
 
 
 ## Citation

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.6)
 
-project(mcnet)
+project(yolop)
 
 add_definitions(-std=c++11)
 
@@ -34,12 +34,12 @@ target_link_libraries(myplugins nvinfer cudart)
 find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
 
-add_executable(mcnet ${PROJECT_SOURCE_DIR}/main.cpp)
-target_link_libraries(mcnet nvinfer)
-target_link_libraries(mcnet ${ZED_LIBS})
-target_link_libraries(mcnet cudart)
-target_link_libraries(mcnet myplugins)
-target_link_libraries(mcnet ${OpenCV_LIBS})
+add_executable(yolop ${PROJECT_SOURCE_DIR}/main.cpp)
+target_link_libraries(yolop nvinfer)
+target_link_libraries(yolop ${ZED_LIBS})
+target_link_libraries(yolop cudart)
+target_link_libraries(yolop myplugins)
+target_link_libraries(yolop ${OpenCV_LIBS})
 
 add_definitions(-O3 -pthread)
 
