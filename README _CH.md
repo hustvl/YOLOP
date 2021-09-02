@@ -273,7 +273,7 @@ python tools/demo --source 0
 
 ### 部署
 
-我们的模型可以在 `Jetson Tx2`上 连接`Zed Camera` 实时推理。我们使用 `TensorRT` 工具进行推理加速。我们在  `./tools/deploy`提供模型部署和推理的全部代码。 
+我们的模型可以在 `Jetson Tx2`上 连接`Zed Camera` 实时推理。我们使用 `TensorRT` 工具进行推理加速。我们在  `./toolkit/deploy`提供模型部署和推理的全部代码。 
 
 
 
