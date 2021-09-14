@@ -52,7 +52,6 @@ def infer_yolop(weight="yolop-640-640.onnx",
 
     print("num outputs: ", len(outputs_info))
 
-    img_name = os.path.basename(img_path).split(".")[0]
     save_det_path = f"./pictures/detect_onnx.jpg"
     save_da_path = f"./pictures/da_onnx.jpg"
     save_ll_path = f"./pictures/ll_onnx.jpg"
