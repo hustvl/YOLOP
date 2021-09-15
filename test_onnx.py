@@ -66,7 +66,7 @@ def infer_yolop(weight="yolop-640-640.onnx",
     # resize & normalize
     canvas, r, dw, dh, new_unpad_w, new_unpad_h = resize_unscale(img_rgb, (640, 640))
 
-    img = canvas.copy().transpose(2, 0, 1).astype(np.float32)  # (3,640,640) RGB
+    img = canvas.copy().astype(np.float32)  # (3,640,640) RGB
     img /= 255.0
     img[:, :, 0] -= 0.485
     img[:, :, 1] -= 0.456
@@ -74,6 +74,8 @@ def infer_yolop(weight="yolop-640-640.onnx",
     img[:, :, 0] /= 0.229
     img[:, :, 1] /= 0.224
     img[:, :, 2] /= 0.225
+
+    img = img.transpose(2, 0, 1)
 
     img = np.expand_dims(img, 0)  # (1, 3,640,640)
 
