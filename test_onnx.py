@@ -168,5 +168,5 @@ if __name__ == "__main__":
 
     infer_yolop(weight=args.weight, img_path=args.img)
     """
-    PYTHONPATH=. python3 ./test_onnx.py --weight yolop-640-640.onnx --img ./inference/images/9aa94005-ff1d4c9a.jpg
+    PYTHONPATH=. python3 ./test_onnx.py --weight yolop-640-640.onnx --img test.jpg
     """
