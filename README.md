@@ -26,7 +26,8 @@
   
 
 ### Results
-
+	
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/yolop-you-only-look-once-for-panoptic-driving/traffic-object-detection-on-bdd100k)](https://paperswithcode.com/sota/traffic-object-detection-on-bdd100k?p=yolop-you-only-look-once-for-panoptic-driving)
 #### Traffic Object Detection Result
 
 | Model          | Recall(%) | mAP50(%) | Speed(fps) |
