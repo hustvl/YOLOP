@@ -3,6 +3,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 from PIL import Image, ImageDraw
+import torch.nn.functional as F
 
 
 def autopad(k, p=None):  # kernel, padding
@@ -33,7 +34,7 @@ class DepthSeperabelConv2d(nn.Module):
         self.downsample = downsample
         self.stride = stride
         try:
-            self.act = nn.Hardswish() if act else nn.Identity()
+            self.act = Hardswish() if act else nn.Identity()
         except:
             self.act = nn.Identity()
 
@@ -63,7 +64,7 @@ class SharpenConv(nn.Module):
         self.conv.weight.requires_grad = False
         self.bn = nn.BatchNorm2d(c2)
         try:
-            self.act = nn.Hardswish() if act else nn.Identity()
+            self.act = Hardswish() if act else nn.Identity()
         except:
             self.act = nn.Identity()
 
@@ -74,6 +75,13 @@ class SharpenConv(nn.Module):
         return self.act(self.conv(x))
 
 
+class Hardswish(nn.Module):  # export-friendly version of nn.Hardswish()
+    @staticmethod
+    def forward(x):
+        # return x * F.hardsigmoid(x)  # for torchscript and CoreML
+        return x * F.hardtanh(x + 3, 0., 6.) / 6.  # for torchscript, CoreML and ONNX
+
+
 class Conv(nn.Module):
     # Standard convolution
     def __init__(self, c1, c2, k=1, s=1, p=None, g=1, act=True):  # ch_in, ch_out, kernel, stride, padding, groups
@@ -81,7 +89,7 @@ class Conv(nn.Module):
         self.conv = nn.Conv2d(c1, c2, k, s, autopad(k, p), groups=g, bias=False)
         self.bn = nn.BatchNorm2d(c2)
         try:
-            self.act = nn.Hardswish() if act else nn.Identity()
+            self.act = Hardswish() if act else nn.Identity()
         except:
             self.act = nn.Identity()
 
@@ -183,7 +191,8 @@ class Detect(nn.Module):
             x[i] = self.m[i](x[i])  # conv
             # print(str(i)+str(x[i].shape))
             bs, _, ny, nx = x[i].shape  # x(bs,255,w,w) to x(bs,3,w,w,85)
-            x[i] = x[i].view(bs, self.na, self.no, ny, nx).permute(0, 1, 3, 4, 2).contiguous()
+            x[i]=x[i].view(bs, self.na, self.no, ny*nx).permute(0, 1, 3, 2).view(bs, self.na, ny, nx, self.no).contiguous()
+            # x[i] = x[i].view(bs, self.na, self.no, ny, nx).permute(0, 1, 3, 4, 2).contiguous()
             # print(str(i)+str(x[i].shape))
 
             if not self.training:  # inference
