@@ -114,7 +114,8 @@ def connect_components_analysis(image):
 def if_y(samples_x):
     for sample_x in samples_x:
         if len(sample_x):
-            if len(sample_x) != (sample_x[-1] - sample_x[0] + 1):
+            # if len(sample_x) != (sample_x[-1] - sample_x[0] + 1) or sample_x[-1] == sample_x[0]:
+            if sample_x[-1] == sample_x[0]:
                 return False
     return True
     
@@ -123,19 +124,14 @@ def fitlane(mask, sel_labels, labels, stats):
     for label_group in sel_labels:
         states = [stats[k] for k in label_group]
         x, y, w, h, _ = states[0]
-        # x_min, y_min, w_min, h_min, _ = np.amin(np.array(states), axis=0)
-        
-        # print(np.array(states))
-        # x = x_min; y = y_min; w = w_max; h = h_max
         # if len(label_group) > 1:
         #     print('in')
         #     for m in range(len(label_group)-1):
         #         labels[labels == label_group[m+1]] = label_group[0]
         t = label_group[0]
-        # if (y + h - 1) >= 720:
-        samples_y = np.linspace(y, H-1, 30)
+        # samples_y = np.linspace(y, H-1, 30)
         # else:
-        #     samples_y = np.linspace(y, y+h-1, 30)
+        samples_y = np.linspace(y, y+h-1, 30)
         
         samples_x = [np.where(labels[int(sample_y)]==t)[0] for sample_y in samples_y]
 
@@ -154,11 +150,7 @@ def fitlane(mask, sel_labels, labels, stats):
                 draw_y = np.linspace(y, y+h-1, h)
             else:
                 # draw_y = np.linspace(y, y+h-1, y+h-y)
-                try:
-                    draw_y = np.linspace(y, H-1, H-y)
-                except:
-                    # print(y)
-                    pass
+                draw_y = np.linspace(y, H-1, H-y)
             draw_x = np.polyval(func, draw_y)
             # draw_y = draw_y[draw_x < W]
             # draw_x = draw_x[draw_x < W]
@@ -175,7 +167,10 @@ def fitlane(mask, sel_labels, labels, stats):
             samples_y = np.array(samples_y)
             samples_x = samples_x[samples_y != -1]
             samples_y = samples_y[samples_y != -1]
-            func = np.polyfit(samples_x, samples_y, 2)
+            try:
+                func = np.polyfit(samples_x, samples_y, 2)
+            except:
+                pass
             # y_limits = np.polyval(func, 0)
             # if y_limits > 720 or y_limits < 0:
             # if (x + w - 1) >= 1280:
