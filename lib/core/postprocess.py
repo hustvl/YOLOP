@@ -111,129 +111,104 @@ def connect_components_analysis(image):
     # print(gray_image.dtype)
     return cv2.connectedComponentsWithStats(gray_image, connectivity=8, ltype=cv2.CV_32S)
 
-# def if_y(samples_x):
-#     for sample_x in samples_x:
-#         if len(sample_x):
-#             if len(sample_x) != (sample_x[-1] - sample_x[0] + 1):
-#                 return False
-#     return True
+def if_y(samples_x):
+    for sample_x in samples_x:
+        if len(sample_x):
+            if len(sample_x) != (sample_x[-1] - sample_x[0] + 1):
+                return False
+    return True
     
-
-# def fitlane(mask, sel_labels, labels, stats):
-#     for label_group in sel_labels:
-#         states = [stats[k] for k in label_group]
-#         x_max, y_max, w_max, h_max, _ = np.amax(np.array(states), axis=0)
-#         x_min, y_min, w_min, h_min, _ = np.amin(np.array(states), axis=0)
-#         # print(np.array(states))
-#         x = x_min; y = y_min; w = w_max; h = h_max
-#         if len(label_group) > 1:
-#             # print(label_group)
-#             for m in range(len(label_group)-1):
-#                 # print(label_group[m+1])
-#                 # print(label_group[0])
-#                 labels[labels == label_group[m+1]] = label_group[0]
-#         t = label_group[0]
-#         if (y_max + h - 1) > 720:
-#             samples_y = np.linspace(y, 720-1, 20)
-#         else:
-#             samples_y = np.linspace(y, y_max+h-1, 20)
+def fitlane(mask, sel_labels, labels, stats):
+    for label_group in sel_labels:
+        states = [stats[k] for k in label_group]
+        x_max, y_max, w_max, h_max, _ = np.amax(np.array(states), axis=0)
+        x_min, y_min, w_min, h_min, _ = np.amin(np.array(states), axis=0)
+        # print(np.array(states))
+        x = x_min; y = y_min; w = w_max; h = h_max
+        if len(label_group) > 1:
+            for m in range(len(label_group)-1):
+                labels[labels == label_group[m+1]] = label_group[0]
+        t = label_group[0]
+        if (y_max + h - 1) >= 720:
+            samples_y = np.linspace(y, 720-1, 30)
+        else:
+            samples_y = np.linspace(y, y_max+h-1, 30)
         
-#         samples_x = [np.where(labels[int(sample_y)]==t)[0] for sample_y in samples_y]
+        samples_x = [np.where(labels[int(sample_y)]==t)[0] for sample_y in samples_y]
 
-#         if if_y(samples_x):
-#             # print('in y')
-#             samples_x = [int(np.mean(sample_x)) if len(sample_x) else -1 for sample_x in samples_x]
-#             samples_x = np.array(samples_x)
-#             samples_y = np.array(samples_y)
-#             samples_y = samples_y[samples_x != -1]
-#             samples_x = samples_x[samples_x != -1]
-#             func = np.polyfit(samples_y, samples_x, 2)
-#             # x_limits = np.polyval(func, 0)
-#             # if x_limits < 0 or x_limits > 1280:
-#             # if (y_max + h - 1) > 720:
-#             draw_y = np.linspace(y, 720-1, 720-y)
-#             # else:
-#             #     draw_y = np.linspace(y, y_max+h-1, y_max+h-y)
-#                 # draw_y = np.linspace(y, 720-1, 720-y)
-#             draw_x = np.polyval(func, draw_y)
-#             draw_y = draw_y[draw_x < 1280]
-#             draw_x = draw_x[draw_x < 1280]
-            
-#             draw_points = (np.asarray([draw_x, draw_y]).T).astype(np.int32)
-#             cv2.polylines(mask, [draw_points], False, 1, thickness=15)
-#         else:
-#             # print('in x')
-#             if (x_max + w - 1) > 1280:
-#                 samples_x = np.linspace(x, 1280-1, 20)
-#             else:
-#                 samples_x = np.linspace(x, x_max+w-1, 20)
-#             samples_y = [np.where(labels[:, int(sample_x)]==t)[0] for sample_x in samples_x]
-#             samples_y = [int(np.mean(sample_y)) if len(sample_y) else -1 for sample_y in samples_y]
-#             samples_x = np.array(samples_x)
-#             samples_y = np.array(samples_y)
-#             samples_x = samples_x[samples_y != -1]
-#             samples_y = samples_y[samples_y != -1]
-#             func = np.polyfit(samples_x, samples_y, 2)
-#             # y_limits = np.polyval(func, 0)
-#             # if y_limits > 720 or y_limits < 0:
-#             # if (x_max + w - 1) > 1280:
-#             draw_x = np.linspace(x, 1280-1, 1280-x)
-#             # else:
-#             #     y_limits = np.polyval(func, 0)
-#             #     if y_limits > 720 or y_limits < 0:
-#             #         draw_x = np.linspace(x, x_max+w-1, w+x_max-x)
-#             #     else:
-#             #         if x_max+w-1 < 640:
-#             #             draw_x = np.linspace(0, x_max+w-1, w+x_max-x)
-#             #         else:
-#             #             draw_x = np.linspace(x, 1280-1, 1280-x)
-#             draw_y = np.polyval(func, draw_x)
-#             draw_x = draw_x[draw_y < 720]
-#             draw_y = draw_y[draw_y < 720]
-#             draw_points = (np.asarray([draw_x, draw_y]).T).astype(np.int32)
-#             cv2.polylines(mask, [draw_points], False, 1, thickness=15)
-#     return mask
+        if if_y(samples_x):
+            samples_x = [int(np.mean(sample_x)) if len(sample_x) else -1 for sample_x in samples_x]
+            samples_x = np.array(samples_x)
+            samples_y = np.array(samples_y)
+            samples_y = samples_y[samples_x != -1]
+            samples_x = samples_x[samples_x != -1]
+            func = np.polyfit(samples_y, samples_x, 2)
+            x_limits = np.polyval(func, 0)
+            # if (y_max + h - 1) >= 720:
+            if x_limits < 0 or x_limits > 1280:
+            # if (y_max + h - 1) > 720:
+                draw_y = np.linspace(y, 720-1, 720-y)
+            else:
+                draw_y = np.linspace(y, y_max+h-1, y_max+h-y)
+                # draw_y = np.linspace(y, 720-1, 720-y)
+            draw_x = np.polyval(func, draw_y)
+            draw_y = draw_y[draw_x < 1280]
+            draw_x = draw_x[draw_x < 1280]
+            draw_points = (np.asarray([draw_x, draw_y]).T).astype(np.int32)
+            cv2.polylines(mask, [draw_points], False, 1, thickness=15)
+        else:
+            if (x_max + w - 1) >= 1280:
+                samples_x = np.linspace(x, 1280-1, 30)
+            else:
+                samples_x = np.linspace(x, x_max+w-1, 30)
+            samples_y = [np.where(labels[:, int(sample_x)]==t)[0] for sample_x in samples_x]
+            samples_y = [int(np.mean(sample_y)) if len(sample_y) else -1 for sample_y in samples_y]
+            samples_x = np.array(samples_x)
+            samples_y = np.array(samples_y)
+            samples_x = samples_x[samples_y != -1]
+            samples_y = samples_y[samples_y != -1]
+            func = np.polyfit(samples_x, samples_y, 2)
+            # y_limits = np.polyval(func, 0)
+            # if y_limits > 720 or y_limits < 0:
+            if (x_max + w - 1) >= 1280:
+                draw_x = np.linspace(x, 1280-1, 1280-x)
+            else:
+                y_limits = np.polyval(func, 0)
+                if y_limits >= 720 or y_limits < 0:
+                    draw_x = np.linspace(x, x_max+w-1, w+x_max-x)
+                else:
+                    if x_max+w-1 < 640:
+                        draw_x = np.linspace(0, x_max+w-1, w+x_max-x)
+                    else:
+                        draw_x = np.linspace(x, 1280-1, 1280-x)
+            draw_y = np.polyval(func, draw_x)
+            draw_points = (np.asarray([draw_x, draw_y]).T).astype(np.int32)
+            cv2.polylines(mask, [draw_points], False, 1, thickness=15)
+    return mask
 
-# def connect_lane(image):
-#     if len(image.shape) == 3:
-#         gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-#     else:
-#         gray_image = image
-
-#     mask = np.zeros((image.shape[0], image.shape[1]), np.uint8)
-#     # print(gray_image.dtype)
-#     num_labels, labels, stats, centers = cv2.connectedComponentsWithStats(gray_image, connectivity=8, ltype=cv2.CV_32S)
-#     ratios = []
-#     selected_label = []
+def connect_lane(image, shadow_height=0):
+    if len(image.shape) == 3:
+        gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    else:
+        gray_image = image
+    if shadow_height:
+        image[:shadow_height] = 0
+    mask = np.zeros((image.shape[0], image.shape[1]), np.uint8)
     
-#     for t in range(1, num_labels, 1):
-#         x, y, w, h, area = stats[t]
-#         center = centers[t]
-#         if area > 400:
-#             samples_y = [y, y+h-1]
-#             selected_label.append(t)
-#             samples_x = [np.where(labels[int(m)]==t)[0] for m in samples_y]
-#             samples_x = [int(np.median(sample_x)) for sample_x in samples_x]
-#             delta_x = samples_x[1] - samples_x[0]
-#             if center[0]/1280 > 0.5:
-#                 ratios.append([0.7 * h / delta_x , h / w, 1.])
-#             else:
-#                 ratios.append([0.7 * h / delta_x , h / w, 0.])
-
-#     clustering = DBSCAN(eps=0.3, min_samples=1).fit(ratios)
-#     # print(clustering.labels_)
-#     split_labels = []
-#     selected_label = np.array(selected_label)
-#     for k in range(len(set(clustering.labels_))):
-#         index = np.where(clustering.labels_==k)[0]
-#         split_labels.append(selected_label[index])
+    num_labels, labels, stats, centers = cv2.connectedComponentsWithStats(gray_image, connectivity=8, ltype=cv2.CV_32S)
+    # ratios = []
+    selected_label = []
     
-#     # for i in range(1, num_labels, 1):
-#     #     if i not in set(selected_label):
-#     #         labels[labels == i] = 0
-#     # print(split_labels)
-#     mask_post = fitlane(mask, split_labels, labels, stats)
-#     return mask_post
+    for t in range(1, num_labels, 1):
+        _, _, _, _, area = stats[t]
+        if area > 400:
+            selected_label.append(t)
+    if len(selected_label) == 0:
+        return mask
+    else:
+        split_labels = [[label,] for label in selected_label]
+        mask_post = fitlane(mask, split_labels, labels, stats)
+        return mask_post
 
 
 

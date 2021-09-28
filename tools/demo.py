@@ -26,7 +26,7 @@ from lib.dataset import LoadImages, LoadStreams
 from lib.core.general import non_max_suppression, scale_coords
 from lib.utils import plot_one_box,show_seg_result
 from lib.core.function import AverageMeter
-from lib.core.postprocess import morphological_process
+from lib.core.postprocess import morphological_process, connect_lane
 from tqdm import tqdm
 normalize = transforms.Normalize(
         mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]
@@ -117,12 +117,15 @@ def detect(cfg,opt):
         da_seg_mask = torch.nn.functional.interpolate(da_predict, scale_factor=int(1/ratio), mode='bilinear')
         _, da_seg_mask = torch.max(da_seg_mask, 1)
         da_seg_mask = da_seg_mask.int().squeeze().cpu().numpy()
+        # da_seg_mask = morphological_process(da_seg_mask, kernel_size=7)
 
         
         ll_predict = ll_seg_out[:, :,pad_h:(height-pad_h),pad_w:(width-pad_w)]
         ll_seg_mask = torch.nn.functional.interpolate(ll_predict, scale_factor=int(1/ratio), mode='bilinear')
         _, ll_seg_mask = torch.max(ll_seg_mask, 1)
         ll_seg_mask = ll_seg_mask.int().squeeze().cpu().numpy()
+        ll_seg_mask = morphological_process(ll_seg_mask, kernel_size=7, func_type=cv2.MORPH_OPEN)
+        ll_seg_mask = connect_lane(ll_seg_mask)
 
         img_det = show_seg_result(img_det, (da_seg_mask, ll_seg_mask), _, _, is_demo=True)
 
