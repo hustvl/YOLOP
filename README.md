@@ -11,6 +11,8 @@
 
 ---
 
+[中文文档](https://github.com/hustvl/YOLOP/blob/main/README%20_CH.md)
+
 ### The Illustration of YOLOP
 
 ![yolop](pictures/yolop.png)
@@ -24,7 +26,8 @@
   
 
 ### Results
-
+	
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/yolop-you-only-look-once-for-panoptic-driving/traffic-object-detection-on-bdd100k)](https://paperswithcode.com/sota/traffic-object-detection-on-bdd100k?p=yolop-you-only-look-once-for-panoptic-driving)
 #### Traffic Object Detection Result
 
 | Model          | Recall(%) | mAP50(%) | Speed(fps) |
@@ -136,7 +139,6 @@
 │ │ ├─train.py    
 ├─toolkits
 │ │ ├─depoly    # Deployment of model
-│ │ ├─label_conversion
 ├─weights    # Pretraining model
 ```
 
@@ -156,29 +158,36 @@ See `requirements.txt` for additional dependencies and version requirements.
 pip install -r requirements.txt
 ```
 
-
 ### Data preparation
 
-Download `BDD100k dataset`  from [link](https://bdd-data.berkeley.edu/),  and convert the label into the form of training requirements. 
+#### Download
 
-- The annotations of detection  just need to keep the original format. (Each `.jpg`  corresponds to one `.json`)
-- The annotations of drivable area segmentation need to be binary image. (Each `.jpg`  corresponds to one `.png`)
-- The annotations of lane line segmentation need to be binary image. (Each `.jpg` corresponds to one `.png`)
+- Download the images from [images](https://bdd-data.berkeley.edu/).
 
-We provide the code for conversion of label in `./toolkits/label_conversion`.  We recommend the directory structure to be the following:
+- Download the annotations of detection from [det_annotations](https://drive.google.com/file/d/1Ge-R8NTxG1eqd4zbryFo-1Uonuh0Nxyl/view?usp=sharing). 
+- Download the annotations of drivable area segmentation from [da_seg_annotations](https://drive.google.com/file/d/1xy_DhUZRHR8yrZG3OwTQAHhYTnXn7URv/view?usp=sharing). 
+- Download the annotations of lane line segmentation from [ll_seg_annotations](https://drive.google.com/file/d/1lDNTPIQj_YLNZVkksKM25CvCHuquJ8AP/view?usp=sharing). 
+
+We recommend the dataset directory structure to be the following:
 
 ```
 # The id represent the correspondence relation
 ├─dataset root
-│ ├─images/ id.jpg
-│ ├─det_annotations/ id.json
-│ ├─da_seg_annotations/ id.png
-│ ├─ll_seg_annotations/ id.png
+│ ├─images
+│ │ ├─train
+│ │ ├─val
+│ ├─det_annotations
+│ │ ├─train
+│ │ ├─val
+│ ├─da_seg_annotations
+│ │ ├─train
+│ │ ├─val
+│ ├─ll_seg_annotations
+│ │ ├─train
+│ │ ├─val
 ```
 
 Update the your dataset path in the `./lib/config/default.py`.
-
-
 
 ### Training
 
@@ -264,9 +273,26 @@ python tools/demo --source 0
 
 ### Deployment
 
-Our model can reason in real-time on `Jetson Tx2`, with `Zed Camera` to capture image. We use `TensorRT` tool for speeding up. We provide code for deployment and reasoning of model in  `./tools/deploy`. 
+Our model can reason in real-time on `Jetson Tx2`, with `Zed Camera` to capture image. We use `TensorRT` tool for speeding up. We provide code for deployment and reasoning of model in  `./toolkits/deploy`.
 
+#### Model Transfer
 
+Before reasoning with TensorRT C++ API, you need to transfer the `.pth` file into binary file which can be read by C++.
+
+```shell
+python toolkits/deploy/gen_wts.py
+```
+
+After running the above command, you obtain a binary file named `yolop.wts`.
+
+#### Running Inference
+
+TensorRT needs an engine file for inference. Building an engine is time-consuming. It is convenient to save an engine file so that you can reuse it every time you run the inference. The process is integrated in `main.cpp`. It can determine whether to build an engine according to the existence of your engine file.
+
+### Third Parties Resource  
+* YOLOP OpenCV-DNN C++ Demo: [YOLOP-opencv-dnn](https://github.com/hpc203/YOLOP-opencv-dnn) from [hpc203](https://github.com/hpc203)  
+* YOLOP ONNXRuntime C++ Demo: [lite.ai](https://github.com/DefTruth/lite.ai/blob/main/ort/cv/yolop.cpp) from [DefTruth](https://github.com/DefTruth)  
+* YOLOP NCNN C++ Demo: [YOLOP-NCNN](https://github.com/EdVince/YOLOP-NCNN) from [EdVince](https://github.com/EdVince)  
 
 ## Citation
 

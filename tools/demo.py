@@ -40,7 +40,7 @@ transform=transforms.Compose([
 
 def detect(cfg,opt):
 
-    logger, final_output_dir, tb_log_dir = create_logger(
+    logger, _, _ = create_logger(
         cfg, cfg.LOG_DIR, 'demo')
 
     device = select_device(logger,opt.device)
@@ -92,8 +92,9 @@ def detect(cfg,opt):
         t1 = time_synchronized()
         det_out, da_seg_out,ll_seg_out= model(img)
         t2 = time_synchronized()
-
-        inf_out,train_out = det_out
+        # if i == 0:
+        #     print(det_out)
+        inf_out, _ = det_out
         inf_time.update(t2-t1,img.size(0))
 
         # Apply NMS
@@ -125,7 +126,7 @@ def detect(cfg,opt):
         _, ll_seg_mask = torch.max(ll_seg_mask, 1)
         ll_seg_mask = ll_seg_mask.int().squeeze().cpu().numpy()
         ll_seg_mask = morphological_process(ll_seg_mask, kernel_size=7, func_type=cv2.MORPH_OPEN)
-        ll_seg_mask = connect_lane(ll_seg_mask)
+        # ll_seg_mask = connect_lane(ll_seg_mask)
 
         img_det = show_seg_result(img_det, (da_seg_mask, ll_seg_mask), _, _, is_demo=True)
 
