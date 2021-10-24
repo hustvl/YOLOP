@@ -293,7 +293,9 @@ TensorRT needs an engine file for inference. Building an engine is time-consumin
 * YOLOP OpenCV-DNN C++ Demo: [YOLOP-opencv-dnn](https://github.com/hpc203/YOLOP-opencv-dnn) from [hpc203](https://github.com/hpc203)  
 * YOLOP ONNXRuntime C++ Demo: [lite.ai.toolkit](https://github.com/DefTruth/lite.ai/blob/main/lite/ort/cv/yolop.cpp) from [DefTruth](https://github.com/DefTruth)  
 * YOLOP NCNN C++ Demo: [YOLOP-NCNN](https://github.com/EdVince/YOLOP-NCNN) from [EdVince](https://github.com/EdVince)  
-
+* YOLOP MNN C++ Demo: [YOLOP-MNN](https://github.com/DefTruth/lite.ai/blob/main/lite/mnn/cv/mnn_yolop.cpp) from [DefTruth](https://github.com/DefTruth) 
+* YOLOP TNN C++ Demo: [YOLOP-TNN](https://github.com/DefTruth/lite.ai/blob/main/lite/tnn/cv/tnn_yolop.cpp) from [DefTruth](https://github.com/DefTruth) 	
+	
 ## Citation
 
 If you find our paper and code useful for your research, please consider giving a star :star:   and citation :pencil: :
