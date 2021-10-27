@@ -5,11 +5,11 @@ from lib.utils.utils import select_device
 from lib.config import cfg
 from lib.models import get_net
 
-def yolop(pretrained=True, weights = "https://github.com/hustvl/YOLOP/blob/main/weights/End-to-end.pth", device=None):
+def yolop(pretrained=True, weights = "https://github.com/hustvl/YOLOP/blob/main/weights/End-to-end.pth", device="cpu"):
     """Creates YOLOP model
     Arguments:
         pretrained (bool): load pretrained weights into the model
-        wieghts (int): number of input channels
+        wieghts (int): the url of pretrained weights
         device (str): cuda device i.e. 0 or 0,1,2,3 or cpu
     Returns:
         YOLOP pytorch model
