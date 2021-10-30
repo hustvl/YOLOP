@@ -137,7 +137,7 @@
 │ │ ├─test.py    
 │ │ ├─train.py    
 ├─toolkits
-│ │ ├─depoly    # Deployment of model
+│ │ ├─deploy    # Deployment of model
 ├─weights    # Pretraining model
 ```
 
@@ -237,7 +237,7 @@ python tools/test.py --weights weights/End-to-end.pth
 测试所使用的的图片存储在 `--source`下, 然后测试结果会保存在 `--save-dir`下：
 
 ```shell
-python tools/demo --source inference/images
+python tools/demo.py --source inference/images
 ```
 
 
@@ -247,7 +247,7 @@ python tools/demo --source inference/images
 如果你的计算机连接了摄像头, 你可以将 `source` 设为摄像头的序号(默认值为 0).
 
 ```shell
-python tools/demo --source 0
+python tools/demo.py --source 0
 ```
 
 
