@@ -99,7 +99,7 @@ def detect(cfg,opt):
 
         # Apply NMS
         t3 = time_synchronized()
-        det_pred = non_max_suppression(inf_out, conf_thres=0.25, iou_thres=0.45, classes=None, agnostic=False)
+        det_pred = non_max_suppression(inf_out, conf_thres=opt.conf_thres, iou_thres=opt.iou_thres, classes=None, agnostic=False)
         t4 = time_synchronized()
 
         nms_time.update(t4-t3,img.size(0))
