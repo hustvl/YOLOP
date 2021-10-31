@@ -138,7 +138,7 @@
 │ │ ├─test.py    
 │ │ ├─train.py    
 ├─toolkits
-│ │ ├─depoly    # Deployment of model
+│ │ ├─deploy    # Deployment of model
 ├─weights    # Pretraining model
 ```
 
@@ -237,7 +237,7 @@ We provide two testing method.
 You can store the image or video in `--source`, and then save the reasoning result to `--save-dir`
 
 ```shell
-python tools/demo --source inference/images
+python tools/demo.py --source inference/images
 ```
 
 
@@ -247,7 +247,7 @@ python tools/demo --source inference/images
 If there are any camera connected to your computer, you can set the `source` as the camera number(The default is 0).
 
 ```shell
-python tools/demo --source 0
+python tools/demo.py --source 0
 ```
 
 
