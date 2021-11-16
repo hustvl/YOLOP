@@ -138,6 +138,7 @@
 │ │ ├─train.py    
 ├─toolkits
 │ │ ├─deploy    # Deployment of model
+│ │ ├─datapre    # Generation of gt(mask) for drivable area segmentation task
 ├─weights    # Pretraining model
 ```
 
@@ -274,6 +275,16 @@ python tools/demo.py --source 0
 ### 部署
 
 我们的模型可以在 `Jetson Tx2`上 连接`Zed Camera` 实时推理。我们使用 `TensorRT` 工具进行推理加速。我们在  `./toolkits/deploy`提供模型部署和推理的全部代码。 
+
+
+
+### 分割标签生成
+
+你可以通过运行以下命令生成可行驶区域的Mask标签
+
+```shell
+python toolkits/datasetpre/gen_bdd_seglabel.py
+```
 
 
 
