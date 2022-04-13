@@ -139,7 +139,7 @@ class MultiHeadLoss(nn.Module):
         liou_ll *= cfg.LOSS.LL_IOU_GAIN * self.lambdas[5]
 
         
-        if cfg.TRAIN.DET_ONLY or cfg.TRAIN.ENC_DET_ONLY or cfg.TRAIN.DET_ONLY:
+        if cfg.TRAIN.DET_ONLY or cfg.TRAIN.ENC_DET_ONLY:
             lseg_da = 0 * lseg_da
             lseg_ll = 0 * lseg_ll
             liou_ll = 0 * liou_ll
