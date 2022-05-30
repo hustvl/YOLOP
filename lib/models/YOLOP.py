@@ -561,7 +561,7 @@ class MCnet(nn.Module):
             cache.append(x if block.index in self.save else None)
         out.insert(0,det_out)
         return out
-            
+
     
     def _initialize_biases(self, cf=None):  # initialize biases into Detect(), cf is class frequency
         # https://arxiv.org/abs/1708.02002 section 3.3
@@ -586,9 +586,7 @@ if __name__ == "__main__":
     input_ = torch.randn((1, 3, 256, 256))
     gt_ = torch.rand((1, 2, 256, 256))
     metric = SegmentationMetric(2)
-    model_out,SAD_out = model(input_)
-    detects, dring_area_seg, lane_line_seg = model_out
-    Da_fmap, LL_fmap = SAD_out
+    detects, dring_area_seg, lane_line_seg = model(input_)
     for det in detects:
         print(det.shape)
     print(dring_area_seg.shape)
