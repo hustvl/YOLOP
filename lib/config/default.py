@@ -35,7 +35,7 @@ _C.MODEL.EXTRA = CN(new_allowed=True)
 # loss params
 _C.LOSS = CN(new_allowed=True)
 _C.LOSS.LOSS_NAME = ''
-_C.LOSS.MULTI_HEAD_LAMBDA = None
+_C.LOSS.MULTI_HEAD_LAMBDA = False
 _C.LOSS.FL_GAMMA = 0.0  # focal loss gamma
 _C.LOSS.CLS_POS_WEIGHT = 1.0  # classification loss positive weights
 _C.LOSS.OBJ_POS_WEIGHT = 1.0  # object loss positive weights
