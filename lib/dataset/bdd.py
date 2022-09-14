@@ -4,6 +4,7 @@ import json
 from .AutoDriveDataset import AutoDriveDataset
 from .convert import convert, id_dict, id_dict_single
 from tqdm import tqdm
+from os.path import exists
 
 single_cls = True       # just detect vehicle
 
@@ -33,6 +34,8 @@ class BddDataset(AutoDriveDataset):
             mask_path = str(mask)
             label_path = mask_path.replace(str(self.mask_root), str(self.label_root)).replace(".png", ".json")
             image_path = mask_path.replace(str(self.mask_root), str(self.img_root)).replace(".png", ".jpg")
+            if not exists(image_path):
+                continue
             lane_path = mask_path.replace(str(self.mask_root), str(self.lane_root))
             with open(label_path, 'r') as f:
                 label = json.load(f)
