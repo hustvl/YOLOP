@@ -226,7 +226,7 @@ _C.TRAIN.DET_ONLY = False          # Only train detection task
 ```shell
 python tools/train.py
 ```
-多GPU训练
+多GPU训练:
 ```
 python -m torch.distributed.launch --nproc_per_node=N tools/train.py  # N: the number of GPUs
 ```
