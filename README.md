@@ -226,7 +226,10 @@ Start training:
 ```shell
 python tools/train.py
 ```
-
+Multi GPU mode:
+```shell
+python -m torch.distributed.launch --nproc_per_node=N test.py  # N: the number of GPUs
+```
 
 
 ### Evaluation
