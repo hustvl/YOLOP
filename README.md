@@ -228,7 +228,7 @@ python tools/train.py
 ```
 Multi GPU mode:
 ```shell
-python -m torch.distributed.launch --nproc_per_node=N test.py  # N: the number of GPUs
+python -m torch.distributed.launch --nproc_per_node=N tools/train.py  # N: the number of GPUs
 ```
 
 
