@@ -10,7 +10,7 @@ import torch
 import torch.nn.parallel
 from torch.nn.parallel import DistributedDataParallel as DDP
 from torch.cuda import amp
-import torch.distributed as disthttps://github.com/ginofft/YOLOP.git
+import torch.distributed as dist
 import torch.backends.cudnn as cudnn
 import torch.optim
 import torch.utils.data
