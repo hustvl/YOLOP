@@ -307,6 +307,13 @@ python toolkits/datasetpre/gen_bdd_seglabel.py
 如果你发现我们的代码和论文对你的研究有帮助， 可以考虑给我们 star :star:   和引用 :pencil: :
 
 ```BibTeX
-Dong Wu, Man-Wen Liao, Wei-Tian Zhang, Xing-Gang Wang, Xiang Bai, Wen-Qing Cheng, and Wen-Yu Liu. "Yolop: You only look once for panoptic driving perception." Machine Intelligence Research (2022): 1-13.
+@article{wu2022yolop,
+  title={Yolop: You only look once for panoptic driving perception},
+  author={Wu, Dong and Liao, Man-Wen and Zhang, Wei-Tian and Wang, Xing-Gang and Bai, Xiang and Cheng, Wen-Qing and Liu, Wen-Yu},
+  journal={Machine Intelligence Research},
+  pages={1--13},
+  year={2022},
+  publisher={Springer}
+}
 ```
 
