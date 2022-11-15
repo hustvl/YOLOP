@@ -335,6 +335,13 @@ TensorRT needs an engine file for inference. Building an engine is time-consumin
 If you find our paper and code useful for your research, please consider giving a star :star:   and citation :pencil: :
 
 ```BibTeX
-Dong Wu, Man-Wen Liao, Wei-Tian Zhang, Xing-Gang Wang, Xiang Bai, Wen-Qing Cheng, and Wen-Yu Liu. "Yolop: You only look once for panoptic driving perception." Machine Intelligence Research (2022): 1-13.
+@article{wu2022yolop,
+  title={Yolop: You only look once for panoptic driving perception},
+  author={Wu, Dong and Liao, Man-Wen and Zhang, Wei-Tian and Wang, Xing-Gang and Bai, Xiang and Cheng, Wen-Qing and Liu, Wen-Yu},
+  journal={Machine Intelligence Research},
+  pages={1--13},
+  year={2022},
+  publisher={Springer}
+}
 ```
 
