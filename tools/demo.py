@@ -160,7 +160,7 @@ def detect(cfg,opt):
     print('Done. (%.3fs)' % (time.time() - t0))
     print('inf : (%.4fs/frame)   nms : (%.4fs/frame)' % (inf_time.avg,nms_time.avg))
 
-
+### 自测
 
 
 if __name__ == '__main__':
