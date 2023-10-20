@@ -212,7 +212,7 @@ def main():
                     print('freezing %s' % k)
                     v.requires_grad = False
 
-        if cfg.TRAIN.ENC_DET_ONLY or cfg.TRAIN.DET_ONLY:    # Only train encoder and detection branchs
+        if cfg.TRAIN.ENC_DET_ONLY and cfg.TRAIN.DET_ONLY:    # Only train encoder and detection branchs
             logger.info('freeze two Seg heads...')
             for k, v in model.named_parameters():
                 v.requires_grad = True  # train all layers
