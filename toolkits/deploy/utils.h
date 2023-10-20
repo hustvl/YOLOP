@@ -3,10 +3,14 @@
 
 #include <dirent.h>
 #include <opencv2/opencv.hpp>
+
+#ifdef HAVE_CUDA
 #include <opencv2/cudawarping.hpp>
 #include <opencv2/cudaimgproc.hpp>
 #include <opencv2/cudaarithm.hpp>
 #include <opencv2/highgui.hpp>
+#endif
+
 #include <iostream>
 #include "common.hpp"
 
@@ -33,7 +37,7 @@ static inline cv::Mat preprocess_img(cv::Mat& img, int input_w, int input_h) {
     re.copyTo(out(cv::Rect(x, y, re.cols, re.rows)));
     cv::Mat tensor;
     out.convertTo(tensor, CV_32FC3, 1.f / 255.f);
-    
+
     cv::subtract(tensor, cv::Scalar(0.485, 0.456, 0.406), tensor, cv::noArray(), -1);
     cv::divide(tensor, cv::Scalar(0.229, 0.224, 0.225), tensor, 1, -1);
     // std::cout << cv::format(out, cv::Formatter::FMT_NUMPY)<< std::endl;
@@ -43,6 +47,7 @@ static inline cv::Mat preprocess_img(cv::Mat& img, int input_w, int input_h) {
     return tensor;
 }
 
+#ifdef HAVE_CUDA
 void preprocess_img_gpu(cv::cuda::GpuMat& img, float* gpu_input, int input_w, int input_h) {
     int w, h, x, y;
     float r_w = input_w / (img.cols*1.0);
@@ -77,6 +82,7 @@ void preprocess_img_gpu(cv::cuda::GpuMat& img, float* gpu_input, int input_w, in
     }
     cv::cuda::split(tensor, chw);
 }
+#endif
 
 static inline int read_files_in_dir(const char *p_dir_name, std::vector<std::string> &file_names) {
     DIR *p_dir = opendir(p_dir_name);
@@ -111,6 +117,7 @@ void PrintMat(cv::Mat &A)
   std::cout << std::endl;
 }
 
+#ifdef HAVE_CUDA
 void visualization(cv::cuda::GpuMat& cvt_img, cv::Mat& seg_res, cv::Mat& lane_res, std::vector<Yolo::Detection>& res, char& key)
 {
     static const std::vector<cv::Vec3b> segColor{cv::Vec3b(0, 0, 0), cv::Vec3b(0, 255, 0), cv::Vec3b(255, 0, 0)};
@@ -143,7 +150,7 @@ void visualization(cv::cuda::GpuMat& cvt_img, cv::Mat& seg_res, cv::Mat& lane_re
         cv::rectangle(cvt_img_cpu, r, cv::Scalar(0x27, 0xC1, 0x36), 2);
         cv::putText(cvt_img_cpu, std::to_string((int)res[j].class_id), cv::Point(r.x, r.y - 1), cv::FONT_HERSHEY_PLAIN, 1.2, cv::Scalar(0xFF, 0xFF, 0xFF), 2);
     }
-    
+
 #ifdef SHOW_IMG
     cv::imshow("img", cvt_img_cpu);
     key = cv::waitKey(1);
@@ -151,5 +158,6 @@ void visualization(cv::cuda::GpuMat& cvt_img, cv::Mat& seg_res, cv::Mat& lane_re
     cv::imwrite("../zed_result.jpg", cvt_img_cpu);
 #endif
 }
+#endif
 
 #endif  // TRTX_YOLOV5_UTILS_H_

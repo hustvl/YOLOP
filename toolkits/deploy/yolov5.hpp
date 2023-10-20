@@ -5,7 +5,7 @@
 #include "cuda_utils.h"
 #include "logging.h"
 #include "utils.h"
-#include "calibrator.h"
+//#include "calibrator.h"
 
 #define USE_FP16  // set USE_INT8 or USE_FP16 or USE_FP32
 #define DEVICE 0  // GPU id
@@ -101,7 +101,7 @@ ICudaEngine* build_engine(unsigned int maxBatchSize, IBuilder* builder, IBuilder
     IDeconvolutionLayer* deconv26 = network->addDeconvolutionNd(*conv25->getOutput(0), 128, DimsHW{ 2, 2 }, deconvwts26, emptywts);
     deconv26->setStrideNd(DimsHW{ 2, 2 });
     deconv26->setNbGroups(128);
-    
+
     auto bottleneck_csp27 = bottleneckCSP(network, weightMap, *deconv26->getOutput(0), 128, 64, 1, false, 1, 0.5, "model.27");
     auto conv28 = convBlock(network, weightMap, *bottleneck_csp27->getOutput(0), 32, 3, 1, 1, "model.28");
     // upsample 29
@@ -119,9 +119,9 @@ ICudaEngine* build_engine(unsigned int maxBatchSize, IBuilder* builder, IBuilder
     deconv32->setStrideNd(DimsHW{ 2, 2 });
     deconv32->setNbGroups(8);
 
-    auto conv33 = convBlock(network, weightMap, *deconv32->getOutput(0), 3, 3, 1, 1, "model.33");
+    auto conv33 = convBlock(network, weightMap, *deconv32->getOutput(0), 2, 3, 1, 1, "model.33");
     // segmentation output
-    ISliceLayer *slicelayer = network->addSlice(*conv33->getOutput(0), Dims3{ 0, (Yolo::INPUT_H - Yolo::IMG_H) / 2, 0 }, Dims3{ 3, Yolo::IMG_H, Yolo::IMG_W }, Dims3{ 1, 1, 1 });
+    ISliceLayer *slicelayer = network->addSlice(*conv33->getOutput(0), Dims3{ 0, (Yolo::INPUT_H - Yolo::IMG_H) / 2, 0 }, Dims3{ 2, Yolo::IMG_H, Yolo::IMG_W }, Dims3{ 1, 1, 1 });
     auto segout = network->addTopK(*slicelayer->getOutput(0), TopKOperation::kMAX, 1, 1);
     segout->getOutput(1)->setName(OUTPUT_SEG_NAME);
 
@@ -135,7 +135,7 @@ ICudaEngine* build_engine(unsigned int maxBatchSize, IBuilder* builder, IBuilder
 
     auto bottleneck_csp36 = bottleneckCSP(network, weightMap, *deconv35->getOutput(0), 128, 64, 1, false, 1, 0.5, "model.36");
     auto conv37 = convBlock(network, weightMap, *bottleneck_csp36->getOutput(0), 32, 3, 1, 1, "model.37");
-    
+
     // upsample38
     Weights deconvwts38{ DataType::kFLOAT, deval, 32 * 2 * 2 };
     IDeconvolutionLayer* deconv38 = network->addDeconvolutionNd(*conv37->getOutput(0), 32, DimsHW{ 2, 2 }, deconvwts38, emptywts);
@@ -156,7 +156,7 @@ ICudaEngine* build_engine(unsigned int maxBatchSize, IBuilder* builder, IBuilder
     ISliceLayer *laneSlice = network->addSlice(*conv42->getOutput(0), Dims3{ 0, (Yolo::INPUT_H - Yolo::IMG_H) / 2, 0 }, Dims3{ 2, Yolo::IMG_H, Yolo::IMG_W }, Dims3{ 1, 1, 1 });
     auto laneout = network->addTopK(*laneSlice->getOutput(0), TopKOperation::kMAX, 1, 1);
     laneout->getOutput(1)->setName(OUTPUT_LANE_NAME);
-   
+
     // // std::cout << std::to_string(slicelayer->getOutput(0)->getDimensions().d[0]) << std::endl;
     // // ISliceLayer *tmp1 = network->addSlice(*slicelayer->getOutput(0), Dims3{ 0, 0, 0 }, Dims3{ 1, (Yolo::INPUT_H - 2 * Yolo::PAD_H), Yolo::INPUT_W }, Dims3{ 1, 1, 1 });
     // // ISliceLayer *tmp2 = network->addSlice(*slicelayer->getOutput(0), Dims3{ 1, 0, 0 }, Dims3{ 1, (Yolo::INPUT_H - 2 * Yolo::PAD_H), Yolo::INPUT_W }, Dims3{ 1, 1, 1 });

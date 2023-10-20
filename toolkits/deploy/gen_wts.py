@@ -11,7 +11,7 @@ from lib.config import cfg
 device = torch.device('cpu')
 # Load model
 model = get_net(cfg)
-checkpoint = torch.load('weights/End-to-end.pth', map_location=device)
+checkpoint = torch.load(BASE_DIR + '/weights/End-to-end.pth', map_location=device)
 model.load_state_dict(checkpoint['state_dict'])
 # load to FP32
 model.float()

@@ -139,7 +139,7 @@ int main(int argc, char** argv) {
             auto& res = batch_res[b];
             nms(res, &prob[b * OUTPUT_SIZE], CONF_THRESH, NMS_THRESH);
         }
-        
+
         // show results
         for (int b = 0; b < fcount; ++b) {
             auto& res = batch_res[b];
