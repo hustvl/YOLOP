@@ -61,7 +61,7 @@ _C.DATASET.DATA_FORMAT = 'jpg'
 _C.DATASET.SELECT_DATA = False
 _C.DATASET.ORG_IMG_SIZE = [720, 1280]
 
-# training data augmentation
+# training data augmentation test
 _C.DATASET.FLIP = True
 _C.DATASET.SCALE_FACTOR = 0.25
 _C.DATASET.ROT_FACTOR = 10
