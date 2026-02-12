@@ -1,12 +1,16 @@
-.DS_Store
-__pycache__/
-.idea/
-.tmp/
-.vscode/
-bdd/
+# Ignorer le dataset
+dataset/
+__cache__/
+# Ignorer les poids du modèle (trop lourds)
+
+
+# Ignorer les résultats d'inférence (images générées)
+inference/output/
 runs/
-inference/
-*.pth
-*.pt
-*.tar
-*.tar.gz
+
+# Ignorer les fichiers temporaires Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+env/
